@@ -15,24 +15,23 @@ from cubetrack_cfg import CubeTrack_CFG
 
 BELT_CFG = BeltObjectCfg()
 
+
 @configclass
 class CubeTrackSceneCfg(InteractiveSceneCfg):
     """Configuration for a cart-pole scene."""
-    
+
     # ground plane
     ground = AssetBaseCfg(prim_path="/World/defaultGroundPlane", spawn=sim_utils.GroundPlaneCfg())
 
     # lights
-    dome_light = AssetBaseCfg(
-        prim_path="/World/Light", spawn=sim_utils.DomeLightCfg(intensity=3000.0, color=(0.75, 0.75, 0.75))
-    )
+    dome_light = AssetBaseCfg(prim_path="/World/Light", spawn=sim_utils.DomeLightCfg(intensity=3000.0, color=(0.75, 0.75, 0.75)))
 
     # articulation
-    CubeTrack: ArticulationCfg = CubeTrack_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+    CubeTrack: ArticulationCfg = CubeTrack_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")  # type: ignore
 
-    L_Belt01: BeltObjectCfg = BELT_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot/L_BELTS/left_belt_link001")
-    L_Belt02: BeltObjectCfg = BELT_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot/L_BELTS/left_belt_link002")
-    L_Belt03: BeltObjectCfg = BELT_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot/L_BELTS/left_belt_link003")
+    L_Belt01: BeltObjectCfg = BELT_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot/L_BELTS/left_belt_link001",init_state=BeltObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.15))
+    L_Belt02: BeltObjectCfg = BELT_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot/L_BELTS/left_belt_link002",init_state=BeltObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.15))
+    L_Belt03: BeltObjectCfg = BELT_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot/L_BELTS/left_belt_link003",init_state=BeltObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.15))
     L_Belt04: BeltObjectCfg = BELT_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot/L_BELTS/left_belt_link004")
     L_Belt05: BeltObjectCfg = BELT_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot/L_BELTS/left_belt_link005")
     L_Belt06: BeltObjectCfg = BELT_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot/L_BELTS/left_belt_link006")

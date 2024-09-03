@@ -381,11 +381,11 @@ class InteractiveScene:
         """
         all_keys = ["terrain"]
         for asset_family in [
-            self._articulations,
-            self._deformable_objects,
-            self._rigid_objects,
-            self._sensors,
-            self._extras,
+                self._articulations,
+                self._deformable_objects,
+                self._rigid_objects,
+                self._sensors,
+                self._extras,
         ]:
             all_keys += list(asset_family.keys())
         return all_keys
@@ -406,11 +406,11 @@ class InteractiveScene:
         all_keys = ["terrain"]
         # check if it is in other dictionaries
         for asset_family in [
-            self._articulations,
-            self._deformable_objects,
-            self._rigid_objects,
-            self._sensors,
-            self._extras,
+                self._articulations,
+                self._deformable_objects,
+                self._rigid_objects,
+                self._sensors,
+                self._extras,
         ]:
             out = asset_family.get(key)
             # if found, return
@@ -425,10 +425,7 @@ class InteractiveScene:
     """
 
     def _is_scene_setup_from_cfg(self):
-        return any(
-            not (asset_name in InteractiveSceneCfg.__dataclass_fields__ or asset_cfg is None)
-            for asset_name, asset_cfg in self.cfg.__dict__.items()
-        )
+        return any(not (asset_name in InteractiveSceneCfg.__dataclass_fields__ or asset_cfg is None) for asset_name, asset_cfg in self.cfg.__dict__.items())
 
     def _add_entities_from_cfg(self):
         """Add scene entities from the config."""
