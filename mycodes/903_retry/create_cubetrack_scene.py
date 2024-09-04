@@ -22,7 +22,7 @@ import torch
 import omni.isaac.lab.sim as sim_utils
 from omni.isaac.lab.sim import SimulationContext
 from omni.isaac.lab.scene import InteractiveScene
-from omni.isaac.lab.utils import configclass
+from omni.isaac.lab.assets import Articulation
 
 from cubetrack_scene_ground import CubeTrackSceneCfg
 
@@ -31,7 +31,7 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene):
     """Runs the simulation loop."""
     # Extract scene entities
     # note: we only do this here for readability.
-    robot = scene["CubeTrack"]
+    robot: Articulation = scene["CubeTrack"]
     Belts = []
     # stack the belts in a list
     for i in range(1, 36):
@@ -44,15 +44,20 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene):
     sim_dt = sim.get_physics_dt()
     count = 0
 
-    last_time = time.time()
+    last_reset_time = time.time()  # Initialize last reset time
 
     # Simulation loop
     while simulation_app.is_running():
         # Reset the belt first time
-        if count % 100 == 0:
+        if count % 300 == 0:
             start_reset_time = time.time()
             # reset counter
             count = 0
+
+            # Calculate the time since the last reset
+            time_since_last_reset = start_reset_time - last_reset_time
+            print(f"[INFO]: Time since last reset: {time_since_last_reset:.4f} seconds")
+            last_reset_time = start_reset_time  # Update last reset time
 
             # reset the belts
             for belt in Belts:
@@ -70,17 +75,20 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene):
             robot.write_joint_state_to_sim(joint_pos, joint_vel)
             # clear internal buffers
             scene.reset()
-            now_time = time.time()
-            delta = now_time - last_time
-            print("[INFO" + str(delta) + "]: Resetting robot state...")
-            last_time = now_time
-            print("[INFO]" + str(delta) + "]: Reset time = " + str(last_time - start_reset_time))
 
         # Apply random action
         poses = torch.zeros_like(robot.data.joint_pos)
-        poses[:, 6:8] = 90  # 经测试，弧度制。但是在IsaacSim编辑器中是角度制。Fuck
+        poses[:, 6:8] = 1.57  # rad。但是在IsaacSim编辑器中是角度制。Fuck
 
+        # import pdb
+        # pdb.set_trace()
+
+        velos = torch.zeros_like(robot.data.joint_vel)
+        velos[:, 0:4] = 10.0  # rad
+
+        robot.set_joint_velocity_target(velos)
         robot.set_joint_position_target(poses)
+        # velos = torch.zeros_like
         # -- apply action to the robot
         # robot.set_joint_effort_target(efforts)
         # -- write data to sim
@@ -100,7 +108,7 @@ def main():
     sim_cfg = sim_utils.SimulationCfg(dt=1.0 / 240.0)
     sim = SimulationContext(sim_cfg)
     # Set main camera
-    sim.set_camera_view([2.5, 0.0, 4.0], [0.0, 0.0, 2.0])
+    sim.set_camera_view([2.5, 0.0, 4.0], [0.0, 0.0, 2.0])  # type: ignore
     # Design scene
     scene_cfg = CubeTrackSceneCfg(num_envs=args_cli.num_envs, env_spacing=2.0)
     scene = InteractiveScene(scene_cfg)

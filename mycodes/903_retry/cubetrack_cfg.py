@@ -2,17 +2,12 @@
 Author: Wtrwater 1921852290@qq.com
 Date: 2024-09-03 18:03:39
 LastEditors: Wtrwater 1921852290@qq.com
-LastEditTime: 2024-09-03 18:03:51
+LastEditTime: 2024-09-04 18:52:26
 FilePath: /IsaacLab/mycodes/903_retry/cubetrack_cfg.py
-Description: 
+Description: Configuration for a simple CubeTrack robot.
 
 Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
 '''
-"""
-Author: Jiadong Lu
-Date: 24/05/21
-Details: Configuration for a simple CubeTrack robot.
-"""
 
 import omni.isaac.lab.sim as sim_utils
 from omni.isaac.lab.actuators import ImplicitActuatorCfg

@@ -2,13 +2,15 @@
 Author: Wtrwater 1921852290@qq.com
 Date: 2024-09-03 23:23:28
 LastEditors: Wtrwater 1921852290@qq.com
-LastEditTime: 2024-09-03 23:42:26
+LastEditTime: 2024-09-04 10:46:43
 FilePath: /IsaacLab/mycodes/903_retry/generate_cubetrack_scene.py
 Description: 
 
 Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
 '''
 from pxr import Usd, UsdGeom, UsdPhysics, Gf
+
+base_pos = (0.0, 0.0, 0.15)  # Base position for CubeTrack Articulation
 
 
 def list_rigid_bodies_with_poses(usd_file):
@@ -31,7 +33,7 @@ def list_rigid_bodies_with_poses(usd_file):
 
                 # Extract the translation (position) component from the matrix
                 position = transform.ExtractTranslation()
-                position[2] += 0.15
+                position += base_pos
 
                 # Extract rotation as a quaternion
                 rotation = transform.ExtractRotation().GetQuaternion()
