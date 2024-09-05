@@ -2,7 +2,7 @@
 Author: Wtrwater 1921852290@qq.com
 Date: 2024-09-03 18:03:39
 LastEditors: Wtrwater 1921852290@qq.com
-LastEditTime: 2024-09-04 18:52:26
+LastEditTime: 2024-09-05 00:11:01
 FilePath: /IsaacLab/mycodes/903_retry/cubetrack_cfg.py
 Description: Configuration for a simple CubeTrack robot.
 
@@ -42,7 +42,7 @@ Useless_ACTUATOR_CFG = ImplicitActuatorCfg(
 
 CubeTrack_CFG = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(
-        usd_path=f"/home/jiadong/CubeTrack/CubeTrack_Isaac/509_NoBelts/CubeTrackV2_Nobelts.usd",
+        usd_path=f"/home/jiadong/CubeTrack/CubeTrack_Isaac/509_NoBelts/CubeTrackV2_latest.usd",
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             disable_gravity=False,
             retain_accelerations=False,

@@ -8,7 +8,10 @@ import omni.isaac.lab.sim as sim_utils
 from omni.isaac.lab.assets import ArticulationCfg, AssetBaseCfg, RigidObjectCfg
 from omni.isaac.lab.utils import configclass
 from omni.isaac.lab.scene import InteractiveSceneCfg
+from omni.isaac.lab.terrains import TerrainImporterCfg
 
+from omni.isaac.lab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
+from omni.isaac.lab.utils.assets import ISAAC_NUCLEUS_DIR
 from cubetrack_cfg import CubeTrack_CFG
 
 BELT_CFG = RigidObjectCfg()
@@ -18,8 +21,21 @@ BELT_CFG = RigidObjectCfg()
 class CubeTrackSceneCfg(InteractiveSceneCfg):
     """Configuration for a CubeTrack scene."""
 
-    # ground plane
-    ground = AssetBaseCfg(prim_path="/World/defaultGroundPlane", spawn=sim_utils.GroundPlaneCfg())
+    # add terrain
+    terrain = TerrainImporterCfg(
+        prim_path="/World/ground",
+        terrain_type="generator",
+        terrain_generator=ROUGH_TERRAINS_CFG,
+        max_init_terrain_level=5,
+        collision_group=-1,
+        physics_material=sim_utils.RigidBodyMaterialCfg(
+            friction_combine_mode="multiply",
+            restitution_combine_mode="multiply",
+            static_friction=1.0,
+            dynamic_friction=1.0,
+        ),
+        debug_vis=False,
+    )
 
     # lights
     dome_light = AssetBaseCfg(prim_path="/World/Light", spawn=sim_utils.DomeLightCfg(intensity=3000.0, color=(0.75, 0.75, 0.75)))

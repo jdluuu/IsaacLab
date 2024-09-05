@@ -24,7 +24,6 @@ import omni.isaac.lab_tasks.manager_based.classic.cartpole.mdp as mdp
 ##
 from omni.isaac.lab_assets.cartpole import CARTPOLE_CFG  # isort:skip
 
-
 ##
 # Scene definition
 ##
@@ -133,7 +132,10 @@ class RewardsCfg:
     pole_pos = RewTerm(
         func=mdp.joint_pos_target_l2,
         weight=-1.0,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=["cart_to_pole"]), "target": 0.0},
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=["cart_to_pole"]),
+            "target": 0.0
+        },
     )
     # (4) Shaping tasks: lower cart velocity
     cart_vel = RewTerm(
@@ -158,7 +160,10 @@ class TerminationsCfg:
     # (2) Cart out of bounds
     cart_out_of_bounds = DoneTerm(
         func=mdp.joint_pos_out_of_manual_limit,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=["slider_to_cart"]), "bounds": (-3.0, 3.0)},
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=["slider_to_cart"]),
+            "bounds": (-3.0, 3.0)
+        },
     )
 
 
