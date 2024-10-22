@@ -45,6 +45,8 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene):
     # Define simulation stepping
     sim_dt = sim.get_physics_dt()
     count = 0
+    # camera follow robot id
+    robot_id = 0
 
     last_reset_time = time.time()  # Initialize last reset time
 
@@ -92,6 +94,16 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene):
                 elif event.key == pygame.K_k:
                     left_angle -= 45.0 * np.pi / 180.0
                     right_angle -= 45.0 * np.pi / 180.0
+                elif event.key == pygame.K_SPACE:
+                    # reset the game
+                    count = 0
+                    print("[INFO]: Game reset by hand")
+                elif event.key == pygame.K_1:
+                    robot_id = max(0, robot_id - 1)
+                    print(f"[INFO]: Camera follow robot {robot_id}")
+                elif event.key == pygame.K_2:
+                    robot_id = min(scene.cfg.num_envs - 1, robot_id + 1)
+                    print(f"[INFO]: Camera follow robot {robot_id}")
 
         # Reset the belt first time
         if count % 2000 == 0:
@@ -131,8 +143,13 @@ def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene):
         velos[:, 0:2] = right_velo
         velos[:, 2:4] = left_velo
 
-        # set the camera follow the first robot
-        base_pos = robot.data.body_pos_w[0, 0, :].tolist()
+        # set the camera follow the one of the robot
+        # base_pos = robot.data.body_pos_w[0, 0, :].tolist()
+        # offsets = [2.5, 0.0, 4.0]
+        # came_pos = [base + offset for base, offset in zip(base_pos, offsets)]
+        base_pos = robot.data.root_pos_w[robot_id, :].tolist()
+        # import pdb
+        # pdb.set_trace()
         offsets = [2.5, 0.0, 4.0]
         came_pos = [base + offset for base, offset in zip(base_pos, offsets)]
 
@@ -162,7 +179,7 @@ def main():
     # Set main camera
     sim.set_camera_view([2.5, 0.0, 4.0], [0.0, 0.0, 2.0])  # type: ignore
     # Design scene
-    scene_cfg = CubeTrackSceneCfg(num_envs=1, env_spacing=2.0)
+    scene_cfg = CubeTrackSceneCfg(num_envs=24, env_spacing=2.0)
     scene = InteractiveScene(scene_cfg)
     # Play the simulator
     sim.reset()
